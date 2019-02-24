@@ -20,13 +20,14 @@ void *runner(void *arguments) {
     return NULL;
 }
 
-void thread_mgmt(int n) {
+void thread_mgmt(int n, int input[]) {
     int i;
     struct args arg_array[n];
-    for(i = 0; i < n; i++) {
-        scanf("%d", &arg_array[i].real);
-        scanf("%d", &arg_array[i].img);
+    for(i = 0; i < n - 1; i++) {
+        arg_array[i].real = input[2*i];
+        arg_array[i].img = input[2*i + 1];
     }
+    
     pthread_t threads[n];
     for(i = 0; i < n; i++)
         pthread_create(&threads[i], NULL, &runner, (void *)&arg_array[i]);
@@ -39,6 +40,9 @@ int main() {
     int n = 0;
     printf("Enter number of real numbers to multiply:\n");
     scanf("%d", &n);
-    thread_mgmt(n);   
+    int i, input[n];
+    for(i = 0; i < n; i++)
+        scanf("%d", &input[i]);
+    thread_mgmt(n, input);   
     return 0;
 }
